@@ -1,6 +1,6 @@
 ## Go Ethereum
 
-Golang execution layer implementation of the Ethereum protocol.
+以太坊协议的 Golang 执行层实现。
 
 [![API Reference](
 https://pkg.go.dev/badge/github.com/ethereum/go-ethereum
@@ -9,142 +9,126 @@ https://pkg.go.dev/badge/github.com/ethereum/go-ethereum
 [![Travis](https://app.travis-ci.com/ethereum/go-ethereum.svg?branch=master)](https://app.travis-ci.com/github/ethereum/go-ethereum)
 [![Discord](https://img.shields.io/badge/discord-join%20chat-blue.svg)](https://discord.gg/nthXNEv)
 
-Automated builds are available for stable releases and the unstable master branch. Binary
-archives are published at https://geth.ethereum.org/downloads/.
+自动构建可用于稳定版本和不稳定的 master 分支. 
 
-## Building the source
+二进制的档案发布于 https://geth.ethereum.org/downloads/.
 
-For prerequisites and detailed build instructions please read the [Installation Instructions](https://geth.ethereum.org/docs/getting-started/installing-geth).
+## 构建源
 
-Building `geth` requires both a Go (version 1.21 or later) and a C compiler. You can install
-them using your favourite package manager. Once the dependencies are installed, run
+有关先决条件和详细的构建说明，请阅读 [安装说明](https://geth.ethereum.org/docs/getting-started/installing-geth).
+
+构建 'geth' 需要 Go（版本 1.21 或更高版本）和 C 编译器。您可以安装他们使用您最喜欢的包管理器.
+
+安装依赖项后, 运行
 
 ```shell
 make geth
 ```
 
-or, to build the full suite of utilities:
+或者，要构建全套实用程序，请执行以下操作：
 
 ```shell
 make all
 ```
 
-## Executables
+## 可执行文件
+go-ethereum项目在 'cmd' 目录中提供了几个 wrappers/executables 包装器/可执行文件.
 
-The go-ethereum project comes with several wrappers/executables found in the `cmd`
-directory.
+|  命令   | 描述                                                                                                                                                                                                                                                                                                                                                 |
+| :--------: |----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **`geth`** | 我们的主要以太坊 CLI 客户端. 它是以太坊网络（主网main、测试网test或私有private网）的入口点, 能够作为全节点运行（默认）, 备份节点（保留所有历史状态）或轻节点（实时检索数据）. 它可以被其他进程用作进入以太坊网络的网关，通过暴露在HTTP之上的JSON RPC、WebSocket 或者 IPC 传输. `geth --help` 以及 [CLI 页面](https://geth.ethereum.org/docs/fundamentals/command-line-options) 对于命令行选项.                                                                           |
+|   `clef`   | 独立的签名工具，可以作为 'geth' 的后端签名者。                                                                                                                                                                                                                                                                                                                        |
+|  `devp2p`  | 用于与网络层上的节点交互的实用程序，而无需运行完整的区块链。                                                                                                                                                                                                                                                                                                                     |
+|  `abigen`  | 源代码生成器，用于将以太坊合约定义转换为易于使用、编译时类型安全的 Go 包. 它在平原上运作 [以太坊合约 ABI](https://docs.soliditylang.org/en/develop/abi-spec.html) 如果合同字节码也可用，则具有扩展功能. 但是，它也接受 Solidity 源文件，使开发更加简化. 请参阅我们的 [原生 DApp](https://geth.ethereum.org/docs/developers/dapp-developer/native-bindings) 页面了解详细信息.                                                                         |
+| `bootnode` | 我们的以太坊客户端实现的精简版本，仅参与网络节点发现协议, 但不运行任何更高级别的应用程序协议. 它可以用作轻量级 bootstrap 节点，以帮助在专用网络中查找对等节点。                                                                                                                                                                                                                                                            |
+|   `evm`    | EVM（以太坊虚拟机）的开发人员实用程序版本，能够在可配置的环境和执行模式下运行字节码片段. 其目的是允许对 EVM 操作码进行隔离、细粒度的调试 (e.g. `evm --code 60ff60ff --debug run`).                                                                |
+| `rlpdump`  | 用于转换二进制 RLP 的开发人员实用工具 ([Recursive Length Prefix](https://ethereum.org/en/developers/docs/data-structures-and-encoding/rlp)) 转储 (以太坊协议使用的数据编码既包括网络方面，也包括共识方面) 实现用户友好的层次结构表示 (e.g. `rlpdump --hex CE0183FFFFFFC4C304050583616263`). |
 
-|  Command   | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-| :--------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`geth`** | Our main Ethereum CLI client. It is the entry point into the Ethereum network (main-, test- or private net), capable of running as a full node (default), archive node (retaining all historical state) or a light node (retrieving data live). It can be used by other processes as a gateway into the Ethereum network via JSON RPC endpoints exposed on top of HTTP, WebSocket and/or IPC transports. `geth --help` and the [CLI page](https://geth.ethereum.org/docs/fundamentals/command-line-options) for command line options. |
-|   `clef`   | Stand-alone signing tool, which can be used as a backend signer for `geth`.                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-|  `devp2p`  | Utilities to interact with nodes on the networking layer, without running a full blockchain.                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-|  `abigen`  | Source code generator to convert Ethereum contract definitions into easy-to-use, compile-time type-safe Go packages. It operates on plain [Ethereum contract ABIs](https://docs.soliditylang.org/en/develop/abi-spec.html) with expanded functionality if the contract bytecode is also available. However, it also accepts Solidity source files, making development much more streamlined. Please see our [Native DApps](https://geth.ethereum.org/docs/developers/dapp-developer/native-bindings) page for details.                                  |
-| `bootnode` | Stripped down version of our Ethereum client implementation that only takes part in the network node discovery protocol, but does not run any of the higher level application protocols. It can be used as a lightweight bootstrap node to aid in finding peers in private networks.                                                                                                                                                                                                                                               |
-|   `evm`    | Developer utility version of the EVM (Ethereum Virtual Machine) that is capable of running bytecode snippets within a configurable environment and execution mode. Its purpose is to allow isolated, fine-grained debugging of EVM opcodes (e.g. `evm --code 60ff60ff --debug run`).                                                                                                                                                                                                                                               |
-| `rlpdump`  | Developer utility tool to convert binary RLP ([Recursive Length Prefix](https://ethereum.org/en/developers/docs/data-structures-and-encoding/rlp)) dumps (data encoding used by the Ethereum protocol both network as well as consensus wise) to user-friendlier hierarchical representation (e.g. `rlpdump --hex CE0183FFFFFFC4C304050583616263`).                                                                                                                                                                                |
+## 运行 `geth`
 
-## Running `geth`
+在这里，浏览所有可能的命令行标志超出了范围 (请咨询我们的[CLI Wiki 页面](https://geth.ethereum.org/docs/fundamentals/command-line-options)),
+但是，我们列举了一些常见的参数组合，以帮助您快速上手关于如何运行自己的 'geth' 实例。
 
-Going through all the possible command line flags is out of scope here (please consult our
-[CLI Wiki page](https://geth.ethereum.org/docs/fundamentals/command-line-options)),
-but we've enumerated a few common parameter combos to get you up to speed quickly
-on how you can run your own `geth` instance.
+### 硬件要求
 
-### Hardware Requirements
+最低:
 
-Minimum:
+* 具有 2+ 核心的 CPU
+* 4GB 内存
+* 1TB免费存储空间同步主网
+* 8 MBit/sec 下载互联网服务
 
-* CPU with 2+ cores
-* 4GB RAM
-* 1TB free storage space to sync the Mainnet
-* 8 MBit/sec download Internet service
+推荐:
 
-Recommended:
+* 具有 4+ 核的快速 CPU
+* 16GB+ 内存
+* 高性能 SSD，至少 1TB 的可用空间
+* 25+ MBit/sec 下载互联网服务
 
-* Fast CPU with 4+ cores
-* 16GB+ RAM
-* High-performance SSD with at least 1TB of free space
-* 25+ MBit/sec download Internet service
+### 以太坊主网络上的全节点
 
-### Full node on the main Ethereum network
+到目前为止，最常见的情况是人们想要简单地与以太坊互动网络：创建帐户;转移资金;部署合同并与之交互。
 
-By far the most common scenario is people wanting to simply interact with the Ethereum
-network: create accounts; transfer funds; deploy and interact with contracts. For this
-particular use case, the user doesn't care about years-old historical data, so we can
-sync quickly to the current state of the network. To do so:
+为此在特定用例中，用户不关心多年前的历史数据，因此我们可以快速同步到网络的当前状态。
+
+要做到这一点:
 
 ```shell
 $ geth console
 ```
 
-This command will:
- * Start `geth` in snap sync mode (default, can be changed with the `--syncmode` flag),
-   causing it to download more data in exchange for avoiding processing the entire history
-   of the Ethereum network, which is very CPU intensive.
- * Start the built-in interactive [JavaScript console](https://geth.ethereum.org/docs/interacting-with-geth/javascript-console),
-   (via the trailing `console` subcommand) through which you can interact using [`web3` methods](https://github.com/ChainSafe/web3.js/blob/0.20.7/DOCUMENTATION.md) 
-   (note: the `web3` version bundled within `geth` is very old, and not up to date with official docs),
-   as well as `geth`'s own [management APIs](https://geth.ethereum.org/docs/interacting-with-geth/rpc).
-   This tool is optional and if you leave it out you can always attach it to an already running
-   `geth` instance with `geth attach`.
+此命令将:
+ * 在快照同步模式下启动 'geth' (默认值，可以使用 '--syncmode' 标志进行更),
+   导致它下载更多数据以换取避免处理整个历史记录以太坊网络，这是非常占用 CPU 资源的。
+ * 启动内置交互 [JavaScript console](https://geth.ethereum.org/docs/interacting-with-geth/javascript-console),
+   (通过尾随的 'console' 子命令) 通过它，您可以使用 [`web3` methods](https://github.com/ChainSafe/web3.js/blob/0.20.7/DOCUMENTATION.md) 
+   (注意：捆绑在 'geth' 中的 'web3' '版本非常旧，并且没有与官方文档保持同步),
+   以及 'geth' 自己的 [管理 APIs](https://geth.ethereum.org/docs/interacting-with-geth/rpc).
+   这个工具是可选的，如果你把它省略了，你可以随时把它附加到已经运行的带有 'geth attach' 的 'geth' 实例。
 
-### A Full node on the Görli test network
+### Görli 测试网络上的全节点
 
-Transitioning towards developers, if you'd like to play around with creating Ethereum
-contracts, you almost certainly would like to do that without any real money involved until
-you get the hang of the entire system. In other words, instead of attaching to the main
-network, you want to join the **test** network with your node, which is fully equivalent to
-the main network, but with play-Ether only.
+向开发人员过渡，如果您想尝试创建以太坊合同，你几乎肯定希望在不涉及任何真金白银的情况下这样做，直到您可以掌握整个系统的窍门。
+
+换句话说，而不是附加到主 network，您希望将 **test** 网络与您的节点一起加入，这完全相当于主网络，但仅使用 play-Ether。
 
 ```shell
 $ geth --goerli console
 ```
 
-The `console` subcommand has the same meaning as above and is equally
-useful on the testnet too.
+'console' 子命令的含义与上述相同，并且同样在测试网上也很有用。
 
-Specifying the `--goerli` flag, however, will reconfigure your `geth` instance a bit:
+但是，指定 '--goerli' 标志将稍微重新配置您的 'geth' 实例：
 
- * Instead of connecting to the main Ethereum network, the client will connect to the Görli
-   test network, which uses different P2P bootnodes, different network IDs and genesis
-   states.
- * Instead of using the default data directory (`~/.ethereum` on Linux for example), `geth`
-   will nest itself one level deeper into a `goerli` subfolder (`~/.ethereum/goerli` on
-   Linux). Note, on OSX and Linux this also means that attaching to a running testnet node
-   requires the use of a custom endpoint since `geth attach` will try to attach to a
-   production node endpoint by default, e.g.,
-   `geth attach <datadir>/goerli/geth.ipc`. Windows users are not affected by
-   this.
+ * 客户端将连接到Görli测试网络，而不是连接到主要的以太坊网络，该网络使用不同的P2P启动节点，不同的网络ID和创世状态。
+ * “geth”不会使用默认的数据目录（例如在 Linux 上为“~.ethereum”）， 
+   而是将自己嵌套在“goerli”子文件夹（Linux 上为“~.ethereumgoerli”）中。
+   请注意，在 OSX 和 Linux 上，这也意味着连接到正在运行的测试网节点需要使用自定义端点，
+   因为默认情况下，“geth attach”会尝试连接到生产节点端点，例如，“geth attach <datadir>goerligeth.ipc”。
+   Windows 用户不受此影响
 
-*Note: Although some internal protective measures prevent transactions from
-crossing over between the main network and test network, you should always
-use separate accounts for play and real money. Unless you manually move
-accounts, `geth` will by default correctly separate the two networks and will not make any
-accounts available between them.*
+*注意：尽管一些内部保护措施可以防止交易在主网络和测试网络之间交叉，但您应始终使用单独的账户进行游戏和真钱交易。
+除非您手动移动帐户，否则默认情况下，'geth' 将正确分隔两个网络，并且不会在它们之间提供任何帐户.*
 
-### Configuration
+### 配置
 
-As an alternative to passing the numerous flags to the `geth` binary, you can also pass a
-configuration file via:
+作为将众多标志传递给 'geth' '二进制文件的替代方法，您还可以通过以下方式传递配置文件:
 
 ```shell
 $ geth --config /path/to/your_config.toml
 ```
 
-To get an idea of how the file should look like you can use the `dumpconfig` subcommand to
-export your existing configuration:
+要了解文件的外观，您可以使用 'dumpconfig' 子命令来导出现有配置：
 
 ```shell
 $ geth --your-favourite-flags dumpconfig
 ```
 
-*Note: This works only with `geth` v1.6.0 and above.*
+*注意：这仅适用于 'geth' v1.6.0 及更高版本.*
 
-#### Docker quick start
+#### Docker 快速入门
 
-One of the quickest ways to get Ethereum up and running on your machine is by using
-Docker:
+在您的机器上启动并运行以太坊的最快方法之一是使用docker：
 
 ```shell
 docker run -d --name ethereum-node -v /Users/alice/ethereum:/root \
@@ -152,65 +136,57 @@ docker run -d --name ethereum-node -v /Users/alice/ethereum:/root \
            ethereum/client-go
 ```
 
-This will start `geth` in snap-sync mode with a DB memory allowance of 1GB, as the
-above command does.  It will also create a persistent volume in your home directory for
-saving your blockchain as well as map the default ports. There is also an `alpine` tag
-available for a slim version of the image.
+这将在快照同步模式下启动 'geth'，数据库内存限额为 1GB，因为上述命令确实如此。 
+它还将在您的主目录中创建一个持久卷，用于保存您的区块链并映射默认端口。
+还有一个 'alpine' 标签可用于图像的超薄版本。
 
-Do not forget `--http.addr 0.0.0.0`, if you want to access RPC from other containers
-and/or hosts. By default, `geth` binds to the local interface and RPC endpoints are not
-accessible from the outside.
+不要忘记 '--http.addr 0.0.0.0'，如果你想从其他容器和或主机访问 RPC。
+默认情况下，'geth' 绑定到本地接口，并且无法从外部访问 RPC 端点。
 
-### Programmatically interfacing `geth` nodes
+### 以编程方式连接 'geth' 节点
 
-As a developer, sooner rather than later you'll want to start interacting with `geth` and the
-Ethereum network via your own programs and not manually through the console. To aid
-this, `geth` has built-in support for a JSON-RPC based APIs ([standard APIs](https://ethereum.github.io/execution-apis/api-documentation/)
-and [`geth` specific APIs](https://geth.ethereum.org/docs/interacting-with-geth/rpc)).
-These can be exposed via HTTP, WebSockets and IPC (UNIX sockets on UNIX based
-platforms, and named pipes on Windows).
+作为开发人员，您迟早会希望通过自己的程序开始与 'geth' 和以太坊网络进行交互，而不是通过控制台手动进行交互. 
 
-The IPC interface is enabled by default and exposes all the APIs supported by `geth`,
-whereas the HTTP and WS interfaces need to manually be enabled and only expose a
-subset of APIs due to security reasons. These can be turned on/off and configured as
-you'd expect.
+为了帮助这个, `geth` 内置了对基于 JSON-RPC 的 API 的支持 ([标准 APIs](https://ethereum.github.io/execution-apis/api-documentation/)
+and [`geth` 特定 APIs](https://geth.ethereum.org/docs/interacting-with-geth/rpc)).
 
-HTTP based JSON-RPC API options:
+这些可以通过 HTTP、WebSockets 和 IPC（基于 UNIX 上的 UNIX 套接字）公开平台，以及 Windows 上的命名管道）。
 
-  * `--http` Enable the HTTP-RPC server
-  * `--http.addr` HTTP-RPC server listening interface (default: `localhost`)
-  * `--http.port` HTTP-RPC server listening port (default: `8545`)
-  * `--http.api` API's offered over the HTTP-RPC interface (default: `eth,net,web3`)
-  * `--http.corsdomain` Comma separated list of domains from which to accept cross origin requests (browser enforced)
-  * `--ws` Enable the WS-RPC server
-  * `--ws.addr` WS-RPC server listening interface (default: `localhost`)
-  * `--ws.port` WS-RPC server listening port (default: `8546`)
-  * `--ws.api` API's offered over the WS-RPC interface (default: `eth,net,web3`)
-  * `--ws.origins` Origins from which to accept WebSocket requests
-  * `--ipcdisable` Disable the IPC-RPC server
-  * `--ipcapi` API's offered over the IPC-RPC interface (default: `admin,debug,eth,miner,net,personal,txpool,web3`)
-  * `--ipcpath` Filename for IPC socket/pipe within the datadir (explicit paths escape it)
+IPC 接口默认开启，并公开了 'geth' 支持的所有 API，而 HTTP 和 WS 接口需要手动启用，并且只公开一个,
+由于安全原因，API 的子集。这些可以打开/关闭并配置为你所期望的。
 
-You'll need to use your own programming environments' capabilities (libraries, tools, etc) to
-connect via HTTP, WS or IPC to a `geth` node configured with the above flags and you'll
-need to speak [JSON-RPC](https://www.jsonrpc.org/specification) on all transports. You
-can reuse the same connection for multiple requests!
+基于 HTTP 的 JSON-RPC API 选项：
 
-**Note: Please understand the security implications of opening up an HTTP/WS based
-transport before doing so! Hackers on the internet are actively trying to subvert
-Ethereum nodes with exposed APIs! Further, all browser tabs can access locally
-running web servers, so malicious web pages could try to subvert locally available
-APIs!**
+  * `--http` 启用 HTTP-RPC 服务器
+  * `--http.addr` HTTP-RPC服务器监听接口 (default: `localhost`)
+  * `--http.port` HTTP-RPC服务器监听端口 (default: `8545`)
+  * `--http.api` 通过 HTTP-RPC 接口提供的 API (default: `eth,net,web3`)
+  * `--http.corsdomain` 以逗号分隔的域列表，从中接受跨域请求 (浏览器强制执行)
+  * `--ws` 启用 WS-RPC 服务器
+  * `--ws.addr` WS-RPC 服务器监听接口 (default: `localhost`)
+  * `--ws.port` WS-RPC 服务器监听端口 (default: `8546`)
+  * `--ws.api` 通过 WS-RPC 接口提供的 API (default: `eth,net,web3`)
+  * `--ws.origins` 接受 WebSocket 请求的来源
+  * `--ipcdisable` 禁用 IPC-RPC 服务器
+  * `--ipcapi` 通过IPC-RPC接口提供的API (default: `admin,debug,eth,miner,net,personal,txpool,web3`)
+  * `--ipcpath` datadir 中 IPC 套接字/管道的文件名 (显式路径会转义它)
 
-### Operating a private network
+您需要使用自己的编程环境的功能（库、工具等）来通过 HTTP 连接, 
+WS 或 IPC 到配置了上述标志的“geth”节点，您将需要 [JSON-RPC](https://www.jsonrpc.org/specification) 在所有运输工具上. 
+您可以对多个请求重复使用同一连接！
 
-Maintaining your own private network is more involved as a lot of configurations taken for
-granted in the official networks need to be manually set up.
+**注意：请理解打开基于 HTTP/WS 的安全影响在这样做之前运输！
+互联网上的黑客正在积极尝试颠覆具有公开 API 的以太坊节点！
+此外，所有浏览器选项卡都可以在本地访问运行 Web 服务器，因此恶意网页可能会尝试破坏本地可用蜜蜂属！**
 
-#### Defining the private genesis state
+### 运营专用网络
 
-First, you'll need to create the genesis state of your networks, which all nodes need to be
-aware of and agree upon. This consists of a small JSON file (e.g. call it `genesis.json`):
+维护自己的专用网络涉及更多，因为需要进行大量配置在官方授予的网络上需要手动设置。
+
+#### 定义私有创世状态
+
+首先，您需要创建网络的创世状态，所有节点都需要如此了解并同意。
+它由一个小的 JSON 文件组成（例如，将其命名为 'genesis.json'）：
 
 ```json
 {
@@ -239,10 +215,8 @@ aware of and agree upon. This consists of a small JSON file (e.g. call it `genes
 }
 ```
 
-The above fields should be fine for most purposes, although we'd recommend changing
-the `nonce` to some random value so you prevent unknown remote nodes from being able
-to connect to you. If you'd like to pre-fund some accounts for easier testing, create
-the accounts and populate the `alloc` field with their addresses.
+对于大多数用途，上述字段应该没问题，尽管我们建议将 'nonce' 更改为某个随机值，以防止未知的远程节点能够连接到您。
+如果您想为一些账户预注资金以便于测试，请创建账户并在 'alloc' 字段中填充其地址。
 
 ```json
 "alloc": {
@@ -255,97 +229,53 @@ the accounts and populate the `alloc` field with their addresses.
 }
 ```
 
-With the genesis state defined in the above JSON file, you'll need to initialize **every**
-`geth` node with it prior to starting it up to ensure all blockchain parameters are correctly
-set:
+在上述 JSON 文件中定义了创世状态后，您需要在启动之前使用它初始化每个 'geth' 节点，以确保所有区块链参数都已正确设置：
 
 ```shell
 $ geth init path/to/genesis.json
 ```
 
-#### Creating the rendezvous point
+#### 创建交汇点
 
-With all nodes that you want to run initialized to the desired genesis state, you'll need to
-start a bootstrap node that others can use to find each other in your network and/or over
-the internet. The clean way is to configure and run a dedicated bootnode:
+在您想要运行的所有节点都初始化为所需的创世状态后，您需要启动一个 Bootstrap 节点，其他人可以使用该节点在您的网络中和/或上方找到彼此互联网。
+干净的方法是配置并运行一个专用的 bootnode：
 
 ```shell
 $ bootnode --genkey=boot.key
 $ bootnode --nodekey=boot.key
 ```
 
-With the bootnode online, it will display an [`enode` URL](https://ethereum.org/en/developers/docs/networking-layer/network-addresses/#enode)
-that other nodes can use to connect to it and exchange peer information. Make sure to
-replace the displayed IP address information (most probably `[::]`) with your externally
-accessible IP to get the actual `enode` URL.
+引导节点联机时, 它将显示一个 [`enode` URL](https://ethereum.org/en/developers/docs/networking-layer/network-addresses/#enode)其他节点可以用来连接到它并交换对等信息. 
+请务必替换显示的 IP 地址信息 (most probably `[::]`) 使用外部可访问的 IP 获取实际的 'enode' URL.
 
-*Note: You could also use a full-fledged `geth` node as a bootnode, but it's the less
-recommended way.*
+*注意：您也可以使用成熟的 'geth' 节点作为引导节点，但数量较少推荐方式.*
 
-#### Starting up your member nodes
+#### 启动您的成员节点
 
-With the bootnode operational and externally reachable (you can try
-`telnet <ip> <port>` to ensure it's indeed reachable), start every subsequent `geth`
-node pointed to the bootnode for peer discovery via the `--bootnodes` flag. It will
-probably also be desirable to keep the data directory of your private network separated, so
-do also specify a custom `--datadir` flag.
+引导节点可操作且可从外部访问 (you can try `telnet <ip> <port>` to ensure it's indeed reachable), 
+通过 '--bootnodes' 标志启动指向 BootNode 的每个后续 'geth' 节点以进行对等发现. 
+可能还需要将专用网络的数据目录分开, 因此，也要指定自定义的 '--datadir' 标志.
 
 ```shell
 $ geth --datadir=path/to/custom/data/folder --bootnodes=<bootnode-enode-url-from-above>
 ```
 
-*Note: Since your network will be completely cut off from the main and test networks, you'll
-also need to configure a miner to process transactions and create new blocks for you.*
+*注意：由于您的网络将与主网络和测试网络完全切断，因此您将还需要配置一个矿工来处理交易并为您创建新的区块.*
 
-#### Running a private miner
+#### 经营私人矿机
 
 
-In a private network setting a single CPU miner instance is more than enough for
-practical purposes as it can produce a stable stream of blocks at the correct intervals
-without needing heavy resources (consider running on a single thread, no need for multiple
-ones either). To start a `geth` instance for mining, run it with all your usual flags, extended
-by:
+在专用网络设置中，单个 CPU 矿工实例绰绰有余实际用途，因为它可以在正确的时间间隔产生稳定的块流无需大量资源
+（考虑在单个线程上运行，无需多个线程一个）。
+要启动用于挖矿的 'geth' 实例，请使用所有常用的扩展标志运行它由：
 
 ```shell
 $ geth <usual-flags> --mine --miner.threads=1 --miner.etherbase=0x0000000000000000000000000000000000000000
 ```
 
-Which will start mining blocks and transactions on a single CPU thread, crediting all
-proceedings to the account specified by `--miner.etherbase`. You can further tune the mining
-by changing the default gas limit blocks converge to (`--miner.targetgaslimit`) and the price
-transactions are accepted at (`--miner.gasprice`).
+这将开始在单个 CPU 线程上挖掘块和事务, 记入所有对 '--miner.etherbase' 指定的账户进行处理. 
+您可以通过更改默认的 gas limit 块收敛来进一步调整采矿 (`--miner.targetgaslimit`) 价格交易在以下地被接受 (`--miner.gasprice`).
 
-## Contribution
-
-Thank you for considering helping out with the source code! We welcome contributions
-from anyone on the internet, and are grateful for even the smallest of fixes!
-
-If you'd like to contribute to go-ethereum, please fork, fix, commit and send a pull request
-for the maintainers to review and merge into the main code base. If you wish to submit
-more complex changes though, please check up with the core devs first on [our Discord Server](https://discord.gg/invite/nthXNEv)
-to ensure those changes are in line with the general philosophy of the project and/or get
-some early feedback which can make both your efforts much lighter as well as our review
-and merge procedures quick and simple.
-
-Please make sure your contributions adhere to our coding guidelines:
-
- * Code must adhere to the official Go [formatting](https://golang.org/doc/effective_go.html#formatting)
-   guidelines (i.e. uses [gofmt](https://golang.org/cmd/gofmt/)).
- * Code must be documented adhering to the official Go [commentary](https://golang.org/doc/effective_go.html#commentary)
-   guidelines.
- * Pull requests need to be based on and opened against the `master` branch.
- * Commit messages should be prefixed with the package(s) they modify.
-   * E.g. "eth, rpc: make trace configs optional"
-
-Please see the [Developers' Guide](https://geth.ethereum.org/docs/developers/geth-developer/dev-guide)
-for more details on configuring your environment, managing project dependencies, and
-testing procedures.
-
-### Contributing to geth.ethereum.org
-
-For contributions to the [go-ethereum website](https://geth.ethereum.org), please checkout and raise pull requests against the `website` branch.
-For more detailed instructions please see the `website` branch [README](https://github.com/ethereum/go-ethereum/tree/website#readme) or the 
-[contributing](https://geth.ethereum.org/docs/developers/geth-developer/contributing) page of the website.
 
 ## License
 
