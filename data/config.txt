@@ -1,0 +1,552 @@
+NAME:
+   geth.exe - Go-Ethereum命令行界面
+
+USAGE:
+   geth.exe [全局选项] command [命令选项] [参数...]
+
+VERSION:
+   1.14.9-unstable-3801e3e6-20240817
+
+命令:
+   account                管理账户，包括创建新账户、导入私钥、解锁账户等。
+   attach                 启动交互式的 JavaScript 环境，并且连接到正在运行的 Ethereum 节点。这允许开发者执行 JavaScript 代码，访问 Ethereum 的 RPC API 和 web3.js 库。
+   console                类似于 attach，启动交互式的 JavaScript 环境，但是不需要预先存在的运行中的节点。它会启动一个轻量级的节点。
+   db                     提供低级别的数据库操作，比如查询、删除或更新数据。
+   dump                   从存储中转储特定的区块信息。
+   dumpconfig             以 TOML 格式导出当前配置的值。
+   dumpgenesis            将创世区块的 JSON 配置输出到标准输出（stdout）。
+   export                 将整个区块链导出到一个文件中。
+   export-history         将区块链的历史记录导出到 Era 存档文件中。Era 存档是一种特定的文件格式，用于存储区块链的历史状态。
+   import                 从一个文件导入整个区块链。
+   import-history         从 Era 存档文件导入区块链历史记录。
+   import-preimages       从 RLP (Recursive Length Prefix) 流导入预图像数据库。
+   init                   初始化一个新的创世区块，用于启动一个新的测试网络或私有链。
+   js                     (已弃用)执行指定的 JavaScript 文件。建议使用 attach 或 console。
+   license                显示 geth 的许可证信息。
+   removedb               删除区块链和状态数据库，这通常用于重置节点的状态。
+   show-deprecated-flags  列出所有已弃用的命令行标志。
+   snapshot               提供一系列基于快照的命令，用于管理和操作快照数据。
+   verkle                 提供一系列实验性的 verkle 树管理命令。Verkle 树是一种新的数据结构，旨在替代 Merkle Patricia Trie 并减少存储需求。
+   version                打印 geth 的版本号。
+   version-check          在线检查 geth 是否存在已知的安全漏洞。
+   wallet                 管理以太坊预售钱包，包括解锁、创建、导入账户等。
+   help, h                显示一个命令的命令列表或帮助
+
+全局选项:
+   ACCOUNT:账户相关
+
+
+    --allow-insecure-unlock             (default: false)                   (%GETH_ALLOW_INSECURE_UNLOCK%)
+          允许在通过 HTTP 暴露账户相关的 RPC 时进行不安全的账户解锁
+
+    --keystore value                                                       (%GETH_KEYSTORE%)
+          密钥库的目录（默认位于数据目录内）
+
+    --lightkdf                          (default: false)                   (%GETH_LIGHTKDF%)
+          减少密钥派生所需的内存和 CPU 使用率，但可能会牺牲一些密钥派生强度
+
+    --password value                                                       (%GETH_PASSWORD%)
+          用于非交互式密码输入的密码文件
+
+    --pcscdpath value                                                      (%GETH_PCSCDPATH%)
+          智能卡守护进程 (pcscd) 的套接字文件路径
+
+    --signer value                                                         (%GETH_SIGNER%)
+          外部签名器（URL 或 IPC 文件路径）
+
+    --unlock value                                                         (%GETH_UNLOCK%)
+           要解锁的账户列表（逗号分隔）
+
+    --usb                               (default: false)                   (%GETH_USB%)
+          启用 USB 硬件钱包的监控和管理
+
+   API AND CONSOLE: API 和 控制台
+
+
+    --authrpc.addr value                (default: "localhost")             (%GETH_AUTHRPC_ADDR%)
+          认证 API 的监听地址
+
+    --authrpc.jwtsecret value                                              (%GETH_AUTHRPC_JWTSECRET%)
+          用于认证 RPC 端点的 JWT 密钥路径
+
+    --authrpc.port value                (default: 8551)                    (%GETH_AUTHRPC_PORT%)
+          认证 API 的监听端口
+
+    --authrpc.vhosts value              (default: "localhost")             (%GETH_AUTHRPC_VHOSTS%)
+          接受请求的虚拟主机名列表（服务器强制执行）。接受 '*' 通配符。
+
+    --exec value                                                           (%GETH_EXEC%)
+           执行 JavaScript 语句
+
+    --graphql                           (default: false)                   (%GETH_GRAPHQL%)
+          启用 HTTP-RPC 服务器上的 GraphQL。注意，GraphQL 只有在启动了 HTTP 服务器时才能启动。
+
+    --graphql.corsdomain value                                             (%GETH_GRAPHQL_CORSDOMAIN%)
+          接受跨域请求的域名列表（浏览器强制执行）
+
+    --graphql.vhosts value              (default: "localhost")             (%GETH_GRAPHQL_VHOSTS%)
+          接受请求的虚拟主机名列表（服务器强制执行）。接受 '*' 通配符。
+
+    --header value, -H value                                               (%GETH_HEADER%)
+          当使用 --remotedb 或 geth 附加控制台时，向 RPC 服务器传递自定义头部。此标志可以多次给出。
+
+    --http                              (default: false)                   (%GETH_HTTP%)
+          启用 HTTP-RPC 服务器
+
+    --http.addr value                   (default: "localhost")             (%GETH_HTTP_ADDR%)
+          HTTP-RPC 服务器监听接口
+
+    --http.api value                                                       (%GETH_HTTP_API%)
+          通过 HTTP-RPC 接口提供的 API
+
+    --http.corsdomain value                                                (%GETH_HTTP_CORSDOMAIN%)
+          接受跨域请求的域名列表（浏览器强制执行）
+
+    --http.port value                   (default: 8545)                    (%GETH_HTTP_PORT%)
+          HTTP-RPC 服务器监听端口
+
+    --http.rpcprefix value                                                 (%GETH_HTTP_RPCPREFIX%)
+          提供 JSON-RPC 的 HTTP 路径前缀。使用 '/' 表示在所有路径上提供服务。
+
+    --http.vhosts value                 (default: "localhost")             (%GETH_HTTP_VHOSTS%)
+          接受请求的虚拟主机名列表（服务器强制执行）。接受 '*' 通配符。
+
+    --ipcdisable                        (default: false)                   (%GETH_IPCDISABLE%)
+          禁用 IPC-RPC 服务器
+
+    --ipcpath value                                                        (%GETH_IPCPATH%)
+          数据目录内 IPC 套接字/管道的文件名（显式路径会逃逸它）
+
+    --jspath value                      (default: .)                       (%GETH_JSPATH%)
+          `loadScript` 的 JavaScript 根路径
+
+    --preload value                                                        (%GETH_PRELOAD%)
+          控制台预加载的 JavaScript 文件列表
+
+    --rpc.allow-unprotected-txs         (default: false)                   (%GETH_RPC_ALLOW_UNPROTECTED_TXS%)
+          允许提交非 EIP155 签名的不受保护的交易
+
+    --rpc.batch-request-limit value     (default: 1000)                    (%GETH_RPC_BATCH_REQUEST_LIMIT%)
+          批量请求中的最大请求数
+
+    --rpc.batch-response-max-size value (default: 25000000)                (%GETH_RPC_BATCH_RESPONSE_MAX_SIZE%)
+          批量调用返回的最大字节数
+
+    --rpc.enabledeprecatedpersonal      (default: false)                   (%GETH_RPC_ENABLEDEPRECATEDPERSONAL%)
+          启用（已废弃）的 personal 命名空间
+
+    --rpc.evmtimeout value              (default: 5s)                      (%GETH_RPC_EVMTIMEOUT%)
+          设置用于 eth_call 的超时时间（0=无限）
+
+    --rpc.gascap value                  (default: 50000000)                (%GETH_RPC_GASCAP%)
+          设置用于 eth_call/estimateGas 的最大 Gas 限制（0=无限）
+
+    --rpc.txfeecap value                (default: 1)                       (%GETH_RPC_TXFEECAP%)
+          设置通过 RPC API 发送的交易费用上限（以太币单位）（0=无上限）
+
+    --ws                                (default: false)                   (%GETH_WS%)
+          启用 WS-RPC 服务器
+
+    --ws.addr value                     (default: "localhost")             (%GETH_WS_ADDR%)
+          WS-RPC 服务器监听接口
+
+    --ws.api value                                                         (%GETH_WS_API%)
+          通过 WS-RPC 接口提供的 API
+
+    --ws.origins value                                                     (%GETH_WS_ORIGINS%)
+          接受 WebSocket 请求的来源
+
+    --ws.port value                     (default: 8546)                    (%GETH_WS_PORT%)
+          WS-RPC 服务器监听端口
+
+    --ws.rpcprefix value                                                   (%GETH_WS_RPCPREFIX%)
+          提供 JSON-RPC 的 HTTP 路径前缀。使用 '/' 表示在所有路径上提供服务。
+
+   BEACON CHAIN: 链
+
+
+    --beacon.api value                                                     (%GETH_BEACON_API%)
+          Beacon 节点（CL）轻客户端 API URL。此标志可以多次给出。
+
+    --beacon.api.header value                                              (%GETH_BEACON_API_HEADER%)
+          以 "key:value" 格式传递自定义 HTTP 头部字段到远程 Beacon 节点 API。此标志可以多次给出。
+
+    --beacon.checkpoint value                                              (%GETH_BEACON_CHECKPOINT%)
+          Beacon 链弱主观性检查点区块哈希
+
+    --beacon.config value                                                  (%GETH_BEACON_CONFIG%)
+          Beacon 链配置 YAML 文件
+
+    --beacon.genesis.gvroot value                                          (%GETH_BEACON_GENESIS_GVROOT%)
+          Beacon 链创世验证者根
+
+    --beacon.genesis.time value         (default: 0)                       (%GETH_BEACON_GENESIS_TIME%)
+          Beacon 链创世时间
+
+    --beacon.nofilter                   (default: false)                   (%GETH_BEACON_NOFILTER%)
+          禁用未来槽签名过滤
+
+    --beacon.threshold value            (default: 342)                     (%GETH_BEACON_THRESHOLD%)
+          Beacon 同步委员会参与阈值
+
+   DEVELOPER CHAIN: 开发者链
+
+
+    --dev                               (default: false)                   (%GETH_DEV%)
+          启用一个临时的开发者网络，该网络预先包含一个资助好的账户并且挖矿功能是启用的
+
+    --dev.gaslimit value                (default: 11500000)                (%GETH_DEV_GASLIMIT%)
+          初始区块的 Gas 限额
+
+    --dev.period value                  (default: 0)                       (%GETH_DEV_PERIOD%)
+          开发者模式下的区块周期（0 表示只有在有交易待处理时才挖矿）
+
+   ETHEREUM
+
+
+    --bloomfilter.size value            (default: 2048)                    (%GETH_BLOOMFILTER_SIZE%)
+          分配给修剪用布隆过滤器的内存大小（兆字节）
+
+    --config value                                                         (%GETH_CONFIG%)
+          TOML 配置文件
+
+    --datadir value                     (default: C:\Users\Administrator\AppData\Local\Ethereum) (%GETH_DATADIR%)
+          数据库和密钥存储的数据目录
+
+    --datadir.ancient value                                                (%GETH_DATADIR_ANCIENT%)
+          古老数据的根目录（默认位于 chaindata 内部）
+
+    --datadir.minfreedisk value                                            (%GETH_DATADIR_MINFREEDISK%)
+          最小空闲磁盘空间（兆字节），一旦达到此限制则自动关闭节点（默认为 --cache.gc 转换为兆字节，0 表示禁用）
+
+    --db.engine value                                                      (%GETH_DB_ENGINE%)
+          后端数据库实现（'pebble' 或 'leveldb'）
+
+    --eth.requiredblocks value                                             (%GETH_ETH_REQUIREDBLOCKS%)
+          用于对等连接需要遵守的区块号到哈希映射，逗号分隔（<number>=<hash>）
+
+    --exitwhensynced                    (default: false)                   (%GETH_EXITWHENSYNCED%)
+          在同步完成后退出
+
+    --goerli                            (default: false)                   (%GETH_GOERLI%)
+          Görli 网络：预配置的权威证明(poa)测试网络
+
+    --holesky                           (default: false)                   (%GETH_HOLESKY%)
+          Holesky 网络：预配置的权益证明(pos)测试网络
+
+    --mainnet                           (default: false)                   (%GETH_MAINNET%)
+          Ethereum 主网络
+
+    --networkid value                   (default: 0)                       (%GETH_NETWORKID%)
+          明确设置网络标识符（整数）（对于测试网：使用 --goerli, --sepolia, --holesky）
+
+    --override.cancun value             (default: 0)                       (%GETH_OVERRIDE_CANCUN%)
+          手动指定 Cancun 分叉的时间戳，覆盖内置设置
+
+    --override.verkle value             (default: 0)                       (%GETH_OVERRIDE_VERKLE%)
+          手动指定 Verkle 分叉的时间戳，覆盖内置设置
+
+    --sepolia                           (default: false)                   (%GETH_SEPOLIA%)
+          Sepolia 网络：预配置的工作量证明(pos)测试网络,最新的是权益证明(pos)
+
+    --snapshot                          (default: true)                    (%GETH_SNAPSHOT%)
+          启用快照数据库模式（默认为启用）
+
+   GAS PRICE ORACLE: 燃料价格预言机
+
+
+    --gpo.blocks value                  (default: 20)                      (%GETH_GPO_BLOCKS%)
+          用于检查 Gas 价格的最近区块数量
+
+    --gpo.ignoreprice value             (default: 2)                       (%GETH_GPO_IGNOREPRICE%)
+          Gas 价格低于此值时，Gas Price Oracle 将忽略交易
+
+    --gpo.maxprice value                (default: 500000000000)            (%GETH_GPO_MAXPRICE%)
+          Gas Price Oracle 推荐的最大交易优先费用（或伦敦分叉之前的 Gas 价格）
+
+    --gpo.percentile value              (default: 60)                      (%GETH_GPO_PERCENTILE%)
+          建议的 Gas 价格是最近交易 Gas 价格集合的给定百分位数
+
+   LOGGING AND DEBUGGING: 日志记录和调试
+
+
+    --log.compress                      (default: false)                   (%GETH_LOG_COMPRESS%)
+          压缩日志文件
+
+    --log.file value                                                       (%GETH_LOG_FILE%)
+          将日志写入文件
+
+    --log.format value                                                     (%GETH_LOG_FORMAT%)
+          使用的日志格式（json|logfmt|terminal）
+
+    --log.maxage value                  (default: 30)                      (%GETH_LOG_MAXAGE%)
+          日志文件保留的最大天数
+
+    --log.maxbackups value              (default: 10)                      (%GETH_LOG_MAXBACKUPS%)
+          保留的日志文件的最大数量
+
+    --log.maxsize value                 (default: 100)                     (%GETH_LOG_MAXSIZE%)
+          单个日志文件的最大大小（MB）
+
+    --log.rotate                        (default: false)                   (%GETH_LOG_ROTATE%)
+          启用日志文件轮转
+
+    --log.vmodule value                                                    (%GETH_LOG_VMODULE%)
+          模块级别的详细度：逗号分隔的列表，格式为 <pattern>=<level>（例如 eth/*=5,p2p=4）
+
+    --nocompaction                      (default: false)                   (%GETH_NOCOMPACTION%)
+          禁用导入后的数据库压缩
+
+    --pprof                             (default: false)                   (%GETH_PPROF%)
+          启用 pprof HTTP 服务器
+
+    --pprof.addr value                  (default: "127.0.0.1")             (%GETH_PPROF_ADDR%)
+          pprof HTTP 服务器监听地址
+
+    --pprof.blockprofilerate value      (default: 0)                       (%GETH_PPROF_BLOCKPROFILERATE%)
+          以给定的速率启用阻塞分析
+
+    --pprof.cpuprofile value                                               (%GETH_PPROF_CPUPROFILE%)
+          将 CPU 分析结果写入指定文件
+
+    --pprof.memprofilerate value        (default: 524288)                  (%GETH_PPROF_MEMPROFILERATE%)
+          以给定的速率启用内存分析
+
+    --pprof.port value                  (default: 6060)                    (%GETH_PPROF_PORT%)
+          pprof HTTP 服务器监听端口
+
+    --remotedb value                                                       (%GETH_REMOTEDB%)
+          远程数据库 URL
+
+    --trace value                                                          (%GETH_TRACE%)
+          将执行跟踪写入指定文件
+
+    --verbosity value                   (default: 3)                       (%GETH_VERBOSITY%)
+          L日志详细度：0=silent, 1=error, 2=warn, 3=info, 4=debug, 5=detail
+
+   METRICS AND STATS: 指标和统计
+
+
+    --ethstats value                                                       (%GETH_ETHSTATS%)
+          一个 ethstats 服务的报告 URL（nodename:secret@host:port）
+
+    --metrics                           (default: false)                   (%GETH_METRICS%)
+          启用指标收集和报告
+
+    --metrics.addr value                                                   (%GETH_METRICS_ADDR%)
+          启用独立的指标 HTTP 服务器监听接口
+
+    --metrics.influxdb                  (default: false)                   (%GETH_METRICS_INFLUXDB%)
+          启用向外部 InfluxDB 数据库导出/推送指标
+
+    --metrics.influxdb.bucket value     (default: "geth")                  (%GETH_METRICS_INFLUXDB_BUCKET%)
+          推送报告指标到 InfluxDB 的桶名（仅 v2）
+
+    --metrics.influxdb.database value   (default: "geth")                  (%GETH_METRICS_INFLUXDB_DATABASE%)
+          推送报告指标到 InfluxDB 的数据库名
+
+    --metrics.influxdb.endpoint value   (default: "http://localhost:8086") (%GETH_METRICS_INFLUXDB_ENDPOINT%)
+          报告指标到 InfluxDB 的 API 终端
+
+    --metrics.influxdb.organization value (default: "geth")                  (%GETH_METRICS_INFLUXDB_ORGANIZATION%)
+          InfluxDB 的组织名称（仅 v2）
+
+    --metrics.influxdb.password value   (default: "test")                  (%GETH_METRICS_INFLUXDB_PASSWORD%)
+          授权访问数据库的密码
+
+    --metrics.influxdb.tags value       (default: "host=localhost")        (%GETH_METRICS_INFLUXDB_TAGS%)
+          附加到所有测量值的逗号分隔的 InfluxDB 标签（键/值）
+
+    --metrics.influxdb.token value      (default: "test")                  (%GETH_METRICS_INFLUXDB_TOKEN%)
+          授权访问数据库的令牌（仅 v2）
+
+    --metrics.influxdb.username value   (default: "test")                  (%GETH_METRICS_INFLUXDB_USERNAME%)
+          授权访问数据库的用户名
+
+    --metrics.influxdbv2                (default: false)                   (%GETH_METRICS_INFLUXDBV2%)
+          启用向外部 InfluxDB v2 数据库导出/推送指标
+
+    --metrics.port value                (default: 6060)                    (%GETH_METRICS_PORT%)
+          指标 HTTP 服务器监听端口。
+          请注意，必须设置 --metrics.addr
+          才能启动服务器。
+
+   MINER: 挖矿(新版本已使用pos,兼容性而保留的配置项)
+
+
+    --miner.extradata value                                                (%GETH_MINER_EXTRADATA%)
+          由挖矿者设置的区块额外数据（默认为客户端版本）
+
+    --miner.gaslimit value              (default: 30000000)                (%GETH_MINER_GASLIMIT%)
+          采矿区块的目标 Gas 限制
+
+    --miner.gasprice value              (default: 1000000)                 (%GETH_MINER_GASPRICE%)
+          采矿交易所需的最低 Gas 价格
+
+    --miner.pending.feeRecipient value                                     (%GETH_MINER_PENDING_FEERECIPIENT%)
+          设置待处理区块的费用接收者地址，但这个地址不用于实际的区块生产
+
+    --miner.recommit value              (default: 2s)                      (%GETH_MINER_RECOMMIT%)
+          重新创建正在挖掘的区块的时间间隔
+
+   MISC: 杂项
+
+
+    --collectwitness                    (default: false)                   (%GETH_COLLECTWITNESS%)
+          在区块执行期间启用状态见证生成。正在进行的工作标志，不要使用。
+
+    --help, -h                          (default: false)
+          显示帮助信息
+
+    --synctarget value                                                     (%GETH_SYNCTARGET%)
+          同步至指定区块的哈希值（开发者测试功能）
+
+    --version, -v                       (default: false)
+          打印版本信息
+
+   NETWORKING: 网络
+
+
+    --bootnodes value                                                      (%GETH_BOOTNODES%)
+          用于P2P发现引导的逗号分隔的enode URL列表
+
+    --discovery.dns value                                                  (%GETH_DISCOVERY_DNS%)
+          设置DNS发现入口点（使用""来禁用DNS发现）
+
+    --discovery.port value              (default: 30303)                   (%GETH_DISCOVERY_PORT%)
+          为P2P发现设置自定义UDP端口
+
+    --discovery.v4, --discv4            (default: true)                    (%GETH_DISCOVERY_V4%)
+          启用V4发现机制
+
+    --discovery.v5, --discv5            (default: false)                   (%GETH_DISCOVERY_V5%)
+          启用实验性的RLPx V5（主题发现）机制
+
+    --identity value                                                       (%GETH_IDENTITY%)
+          自定义节点名称
+
+    --maxpeers value                    (default: 50)                      (%GETH_MAXPEERS%)
+          最大网络对等节点数量（如果设置为0，则禁用网络）
+
+    --maxpendpeers value                (default: 0)                       (%GETH_MAXPENDPEERS%)
+          待连接尝试的最大数量（如果设置为0，则使用默认值）
+
+    --nat value                         (default: "any")                   (%GETH_NAT%)
+          NAT端口映射机制（any|none|upnp|pmp|pmp:<IP>|extip:<IP>）
+
+    --netrestrict value                                                    (%GETH_NETRESTRICT%)
+          将网络通信限制到给定的IP网络（CIDR掩码）
+
+    --nodekey value                                                        (%GETH_NODEKEY%)
+          P2P节点密钥文件
+
+    --nodekeyhex value                                                     (%GETH_NODEKEYHEX%)
+          作为十六进制表示的P2P节点密钥（仅用于测试）
+
+    --nodiscover                        (default: false)                   (%GETH_NODISCOVER%)
+          禁用对等节点发现机制（手动添加对等节点）
+
+    --port value                        (default: 30303)                   (%GETH_PORT%)
+          网络监听端口
+
+   PERFORMANCE TUNING: 性能调优
+
+
+    --cache value                       (default: 1024)                    (%GETH_CACHE%)
+          分配给内部缓存的内存大小（MB，默认为主网全节点 4096 MB，轻量模式 128 MB）
+
+    --cache.blocklogs value             (default: 32)                      (%GETH_CACHE_BLOCKLOGS%)
+          用于过滤的日志缓存大小（按区块数量计算）
+
+    --cache.database value              (default: 50)                      (%GETH_CACHE_DATABASE%)
+          缓存内存中用于数据库 I/O 的百分比
+
+    --cache.gc value                    (default: 25)                      (%GETH_CACHE_GC%)
+          缓存内存中用于 Trie 剪枝的百分比（默认为全模式 25%，归档模式 0%）
+
+    --cache.noprefetch                  (default: false)                   (%GETH_CACHE_NOPREFETCH%)
+          在区块导入期间禁用启发式状态预取（减少 CPU 和磁盘 I/O，增加等待数据的时间）
+
+    --cache.preimages                   (default: false)                   (%GETH_CACHE_PREIMAGES%)
+          启用记录 Trie 键的 SHA3/keccak 预像
+
+    --cache.snapshot value              (default: 10)                      (%GETH_CACHE_SNAPSHOT%)
+          缓存内存中用于快照缓存的百分比（默认为全模式 10%，归档模式 20%）
+
+    --cache.trie value                  (default: 15)                      (%GETH_CACHE_TRIE%)
+          缓存内存中用于 Trie 缓存的百分比（默认为全模式 15%，归档模式 30%）
+
+    --crypto.kzg value                  (default: "gokzg")                 (%GETH_CRYPTO_KZG%)
+          要使用的 KZG 库实现；gokzg（推荐）或 ckzg
+
+    --fdlimit value                     (default: 0)                       (%GETH_FDLIMIT%)
+          提升打开文件描述符的资源限制（默认为系统文件描述符限制）
+
+   STATE HISTORY MANAGEMENT: 状态历史管理
+
+
+    --gcmode value                      (default: "full")                  (%GETH_GCMODE%)
+          区块链垃圾回收模式，仅在 state.scheme=hash 时相关 ("full", "archive")
+
+    --history.state value               (default: 90000)                   (%GETH_HISTORY_STATE%)
+          保留最近区块的状态历史数量（默认为 90,000 个区块，0 表示整个链）
+
+    --history.transactions value        (default: 2350000)                 (%GETH_HISTORY_TRANSACTIONS%)
+          维护最近区块的交易索引数量（默认约为一年，0 表示整个链）
+
+    --state.scheme value                                                   (%GETH_STATE_SCHEME%)
+          存储以太坊状态的方案 ('hash' 或 'path')
+
+    --syncmode value                    (default: snap)                    (%GETH_SYNCMODE%)
+          区块链同步模式 ("snap" 或 "full")
+
+   TRANSACTION POOL (BLOB): 交易池(一滴)
+
+
+    --blobpool.datacap value            (default: 2684354560)              (%GETH_BLOBPOOL_DATACAP%)
+          为待处理 Blob 交易分配的磁盘空间（软限制）
+
+    --blobpool.datadir value            (default: "blobpool")              (%GETH_BLOBPOOL_DATADIR%)
+          存储 Blob 交易的数据目录
+
+    --blobpool.pricebump value          (default: 100)                     (%GETH_BLOBPOOL_PRICEBUMP%)
+          替换已存在的 Blob 交易的价格增长百分比
+
+   TRANSACTION POOL (EVM): 交易池(evm)
+
+
+    --txpool.accountqueue value         (default: 64)                      (%GETH_TXPOOL_ACCOUNTQUEUE%)
+          每个账户允许的最大非可执行交易槽位数
+
+    --txpool.accountslots value         (default: 16)                      (%GETH_TXPOOL_ACCOUNTSLOTS%)
+          每个账户保证的最小可执行交易槽位数
+
+    --txpool.globalqueue value          (default: 1024)                    (%GETH_TXPOOL_GLOBALQUEUE%)
+          所有账户允许的最大非可执行交易槽位数
+
+    --txpool.globalslots value          (default: 5120)                    (%GETH_TXPOOL_GLOBALSLOTS%)
+          所有账户允许的最大可执行交易槽位数
+
+    --txpool.journal value              (default: "transactions.rlp")      (%GETH_TXPOOL_JOURNAL%)
+          本地交易持久化到磁盘的日志文件
+
+    --txpool.lifetime value             (default: 3h0m0s)                  (%GETH_TXPOOL_LIFETIME%)
+          非可执行交易在队列中的最大存活时间
+
+    --txpool.locals value                                                  (%GETH_TXPOOL_LOCALS%)
+          逗号分隔的账户列表，将这些账户视为本地账户（不会清除，优先纳入区块）
+
+    --txpool.nolocals                   (default: false)                   (%GETH_TXPOOL_NOLOCALS%)
+          禁止对本地提交的交易给予价格豁免
+
+    --txpool.pricebump value            (default: 10)                      (%GETH_TXPOOL_PRICEBUMP%)
+          替换已存在的交易所需的价格增长百分比
+
+    --txpool.pricelimit value           (default: 1)                       (%GETH_TXPOOL_PRICELIMIT%)
+          接受进入交易池的最低 Gas 价格小费
+
+    --txpool.rejournal value            (default: 1h0m0s)                  (%GETH_TXPOOL_REJOURNAL%)
+          重新生成本地交易日志的时间间隔
+
+    --vmtrace.jsonconfig value                                             (%GETH_VMTRACE_JSONCONFIG%)
+          Tracer 配置（JSON 格式）
