@@ -236,6 +236,22 @@ gcr.io/prysmaticlabs/prysm/beacon-chain:stable \
 ./build/bin/geth.exe console --dev --syncmode=snap --datadir ./data/dev --maxpeers 30 --cache 2048 --allow-insecure-unlock --gcmode archive --http --http.addr 0.0.0.0 --http.port 8545 --http.api admin,eth,net,web3,personal --http.corsdomain "*" --ws --ws.addr 0.0.0.0 --ws.port 8546 --ws.api admin,eth,net,web3,personal --ws.origins "*" --ipcdisable
 ```
 
+创建一个带密码的私钥新账户
+```shell
+./build/bin/clef.exe newaccount --keystore ./data/dev/keystore
+```
+
+在 dev 的控制台依次执行下面的脚本, 转账eth给我们创建的账户
+
+```shell
+# 查看所有账户
+eth.accounts
+# 给我们创建的转换转账
+eth.sendTransaction({from: eth.accounts[0], to: eth.accounts[1], value: 100000000000000000000})
+# 查看我们的转换的余额
+eth.getBalance(eth.accounts[1])
+```
+
 ## 运营专用私有网络
 
 维护自己的专用网络涉及更多，因为需要进行大量配置在官方授予的网络上需要手动设置。
