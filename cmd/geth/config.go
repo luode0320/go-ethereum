@@ -151,7 +151,7 @@ func makeConfigNode(ctx *cli.Context) (*node.Node, gethConfig) {
 	cfg := loadBaseConfig(ctx)
 	stack, err := node.New(&cfg.Node)
 	if err != nil {
-		utils.Fatalf("Failed to create the protocol stack: %v", err)
+		utils.Fatalf("无法创建协议栈: %v", err)
 	}
 	// Node doesn't by default populate account manager backends
 	if err := setAccountManagerBackends(stack.Config(), stack.AccountManager(), stack.KeyStoreDir()); err != nil {

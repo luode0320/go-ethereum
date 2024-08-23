@@ -15,6 +15,7 @@
 make geth
 
 # windos: 参考 Makefile 文件的 geth 部分
+./build/ci.go install ./cmd/clef
 ./build/ci.go install ./cmd/geth
 ```
 或者，要构建全套实用程序，请执行以下操作：
@@ -25,7 +26,7 @@ make all
 查看版本:
 ```shell
 # linux
-geth version
+./build/bin/geth version
 
 # windows
 ./build/bin/geth.exe version
@@ -43,8 +44,6 @@ Operating System: windows
 GOPATH=E:\go-1.21.0\bin;C:\Users\Administrator\go
 GOROOT=G:/golang
 ```
-
-
 
 ## 可执行文件
 
@@ -67,8 +66,6 @@ go-ethereum项目在 'cmd' 目录中提供了几个包装器/可执行文件.
 * linux/windos: 启动 geth 客户端
 * docker: 启动 prysm 共识节点
 
-
-
 ## 硬件要求
 
 最低:
@@ -85,13 +82,18 @@ go-ethereum项目在 'cmd' 目录中提供了几个包装器/可执行文件.
 * 高性能 SSD，至少 1TB 的可用空间
 * 25+ MBit/sec 下载互联网服务
 
-
-
 ## 配置
 
 所有配置信息可以查看[data/config.txt](data/config.txt)
 
+## 创建一个钱包账户
+```shell
+# linux
+./build/bin/clef newaccount --keystore ./data/sepolia/keystore
 
+# windows
+./build/bin/clef.exe newaccount --keystore ./data/sepolia/keystore
+```
 
 ## 部署主网络上的全节点
 
@@ -103,7 +105,7 @@ go-ethereum项目在 'cmd' 目录中提供了几个包装器/可执行文件.
 
 ```shell
 # linux
-geth console --datadir ./data/sepolia --maxpeers 30 --cache 2048 --allow-insecure-unlock --gcmode archive --http --http.addr 0.0.0.0 --http.port 8545 --http.api admin,eth,net,web3,personal --http.corsdomain "*" --ws --ws.addr 0.0.0.0 --ws.port 8546 --ws.api admin,eth,net,web3,personal --ws.origins "*" --ipcdisable  --authrpc.addr 0.0.0.0 --authrpc.port 8551 --authrpc.jwtsecret ./data/sepolia/jwtsecret
+./build/bin/geth console --datadir ./data/sepolia --maxpeers 30 --cache 2048 --allow-insecure-unlock --gcmode archive --http --http.addr 0.0.0.0 --http.port 8545 --http.api admin,eth,net,web3,personal --http.corsdomain "*" --ws --ws.addr 0.0.0.0 --ws.port 8546 --ws.api admin,eth,net,web3,personal --ws.origins "*" --ipcdisable  --authrpc.addr 0.0.0.0 --authrpc.port 8551 --authrpc.jwtsecret ./data/sepolia/jwtsecret
 
 # windows
 ./build/bin/geth.exe console --datadir ./data/sepolia --maxpeers 30 --allow-insecure-unlock --cache 2048 --gcmode archive --http --http.addr 0.0.0.0 --http.port 8545 --http.api admin,eth,net,web3,personal --http.corsdomain "*" --ws --ws.addr 0.0.0.0 --ws.port 8546 --ws.api admin,eth,net,web3,personal --ws.origins "*" --ipcdisable  --authrpc.addr 0.0.0.0 --authrpc.port 8551 --authrpc.jwtsecret ./data/sepolia/jwtsecret
@@ -128,9 +130,10 @@ geth console --datadir ./data/sepolia --maxpeers 30 --cache 2048 --allow-insecur
 
 ```shell
 # linux
-geth console --sepolia --datadir ./data/sepolia --maxpeers 30 --cache 2048 --allow-insecure-unlock --gcmode archive --http --http.addr 0.0.0.0 --http.port 8545 --http.api admin,eth,net,web3,personal --http.corsdomain "*" --ws --ws.addr 0.0.0.0 --ws.port 8546 --ws.api admin,eth,net,web3,personal --ws.origins "*" --ipcdisable  --authrpc.addr 0.0.0.0 --authrpc.port 8551 --authrpc.jwtsecret ./data/sepolia/jwtsecret
+./build/bin/geth console --sepolia --datadir ./data/sepolia --maxpeers 30 --cache 2048 --allow-insecure-unlock --gcmode archive --http --http.addr 0.0.0.0 --http.port 8545 --http.api admin,eth,net,web3,personal --http.corsdomain "*" --ws --ws.addr 0.0.0.0 --ws.port 8546 --ws.api admin,eth,net,web3,personal --ws.origins "*" --ipcdisable  --authrpc.addr 0.0.0.0 --authrpc.port 8551 --authrpc.jwtsecret ./data/sepolia/jwtsecret
+
 # windows
-./build/bin/geth.exe console --sepolia --datadir ./data/sepolia --maxpeers 30 --cache 2048 --allow-insecure-unlock --gcmode archive --http --http.addr 0.0.0.0 --http.port 8545 --http.api admin,eth,net,web3,personal --http.corsdomain "*" --ws --ws.addr 0.0.0.0 --ws.port 8546 --ws.api admin,eth,net,web3,personal --ws.origins "*" --ipcdisable  --authrpc.addr 0.0.0.0 --authrpc.port 8551 --authrpc.jwtsecret ./data/sepolia/jwtsecret
+./build/bin/geth.exe console --sepolia --syncmode=snap --datadir ./data/sepolia --maxpeers 30 --cache 2048 --allow-insecure-unlock --gcmode archive --http --http.addr 0.0.0.0 --http.port 8545 --http.api admin,eth,net,web3,personal --http.corsdomain "*" --ws --ws.addr 0.0.0.0 --ws.port 8546 --ws.api admin,eth,net,web3,personal --ws.origins "*" --ipcdisable  --authrpc.addr 0.0.0.0 --authrpc.port 8551 --authrpc.jwtsecret ./data/sepolia/jwtsecret
 ```
 参数解释：
 
@@ -153,8 +156,6 @@ geth console --sepolia --datadir ./data/sepolia --maxpeers 30 --cache 2048 --all
 **注意：**
 
 - 尽管一些内部保护措施可以防止交易在主网络和测试网络之间交叉，但您应始终使用单独的账户进行游戏和真钱交易。
-
-
 
 ## Docker 快速部署 sepolia
 
@@ -225,7 +226,15 @@ gcr.io/prysmaticlabs/prysm/beacon-chain:stable \
 - --genesis-beacon-api-url：获取区块信息的url
 - --accept-terms-of-use：接受条款和条件(用于非交互环境)(默认值:false)
 
+## 部署一个 POA 挖矿的 DEV 本地测试节点
+这个节点可以用于测试环境, 此环境在本地允许, 自带一个无限 eth 的钱包用于测试, 测试数据都在本地允许:
+```shell
+# linux
+./build/bin/geth console --dev --syncmode=snap --datadir ./data/dev --maxpeers 30 --cache 2048 --allow-insecure-unlock --gcmode archive --http --http.addr 0.0.0.0 --http.port 8545 --http.api admin,eth,net,web3,personal --http.corsdomain "*" --ws --ws.addr 0.0.0.0 --ws.port 8546 --ws.api admin,eth,net,web3,personal --ws.origins "*" --ipcdisable
 
+# windows
+./build/bin/geth.exe console --dev --syncmode=snap --datadir ./data/dev --maxpeers 30 --cache 2048 --allow-insecure-unlock --gcmode archive --http --http.addr 0.0.0.0 --http.port 8545 --http.api admin,eth,net,web3,personal --http.corsdomain "*" --ws --ws.addr 0.0.0.0 --ws.port 8546 --ws.api admin,eth,net,web3,personal --ws.origins "*" --ipcdisable
+```
 
 ## 运营专用私有网络
 
@@ -273,7 +282,8 @@ gcr.io/prysmaticlabs/prysm/beacon-chain:stable \
 
 ```shell
 # linux
-geth console --datadir ./data/private/private01 init ./data/private/genesis.json 
+./build/bin/geth console --datadir ./data/private/private01 init ./data/private/genesis.json 
+
 # windos
 ./build/bin/geth.exe console --datadir ./data/private/private01 init ./data/private/genesis.json
 ```

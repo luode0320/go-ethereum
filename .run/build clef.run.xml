@@ -2,10 +2,11 @@
   <configuration default="false" name="build clef" type="GoApplicationRunConfiguration" factoryName="Go Application">
     <module name="go-ethereum" />
     <working_directory value="$PROJECT_DIR$" />
+    <parameters value="install ./cmd/clef" />
     <kind value="FILE" />
     <package value="github.com/ethereum/go-ethereum" />
     <directory value="$PROJECT_DIR$" />
-    <filePath value="$PROJECT_DIR$/cmd/clef/main.go" />
+    <filePath value="$PROJECT_DIR$/build/ci.go" />
     <method v="2" />
   </configuration>
 </component>

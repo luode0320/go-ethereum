@@ -24,10 +24,10 @@ import (
 )
 
 var (
-	ErrDatadirUsed    = errors.New("datadir already used by another process")
-	ErrNodeStopped    = errors.New("node not started")
-	ErrNodeRunning    = errors.New("node already running")
-	ErrServiceUnknown = errors.New("unknown service")
+	ErrDatadirUsed    = errors.New("datadir 已被另一个进程使用")
+	ErrNodeStopped    = errors.New("节点未启动")
+	ErrNodeRunning    = errors.New("节点已在运行")
+	ErrServiceUnknown = errors.New("未知服务")
 
 	datadirInUseErrnos = map[uint]bool{11: true, 32: true, 35: true}
 )

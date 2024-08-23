@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="start sepolia geth" type="ShConfigurationType">
-    <option name="SCRIPT_TEXT" value="./build/bin/geth.exe console --sepolia --syncmode=snap --datadir ./data/sepolia --maxpeers 30 --cache 2048 --allow-insecure-unlock --gcmode archive --http --http.addr 0.0.0.0 --http.port 8545 --http.api admin,eth,net,web3,personal --http.corsdomain &quot;*&quot; --ws --ws.addr 0.0.0.0 --ws.port 8546 --ws.api admin,eth,net,web3,personal --ws.origins &quot;*&quot; --ipcdisable  --authrpc.addr 0.0.0.0 --authrpc.port 8551 --authrpc.jwtsecret ./data/sepolia/jwtsecret " />
+  <configuration default="false" name="start sepolia clef" type="ShConfigurationType">
+    <option name="SCRIPT_TEXT" value="./build/bin/clef.exe newaccount --keystore ./data/sepolia/keystore" />
     <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
     <option name="SCRIPT_PATH" value="" />
     <option name="SCRIPT_OPTIONS" value="" />

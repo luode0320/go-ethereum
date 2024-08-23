@@ -290,16 +290,16 @@ func prepare(ctx *cli.Context) {
 	// If we're running a known preset, log it for convenience.
 	switch {
 	case ctx.IsSet(utils.GoerliFlag.Name):
-		log.Info("Starting Geth on Görli testnet...")
+		log.Info("在 Görli 测试网上启动 Geth...")
 
 	case ctx.IsSet(utils.SepoliaFlag.Name):
-		log.Info("Starting Geth on Sepolia testnet...")
+		log.Info("在 Sepolia 测试网上启动 Geth...")
 
 	case ctx.IsSet(utils.HoleskyFlag.Name):
-		log.Info("Starting Geth on Holesky testnet...")
+		log.Info("在 Holesky 测试网上启动 Geth...")
 
 	case ctx.IsSet(utils.DeveloperFlag.Name):
-		log.Info("Starting Geth in ephemeral dev mode...")
+		log.Info("在临时开发模式下启动 Geth...")
 		log.Warn(`You are running Geth in --dev mode. Please note the following:
 
   1. This mode is only intended for fast, iterative development without assumptions on
